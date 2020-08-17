@@ -3,12 +3,13 @@ const {Client, MessageAttachment} = require('discord.js');
 const bot = new Discord.Client();
 const cheerio = require('cheerio');
 const request = require('request');
+const axios = require('axios');
 require('dotenv').config();
 
 const PREFIX = '$';
 
 bot.on('ready', () => {
-    console.log("The bot is indeed in this bitch!");
+    console.log("DengBot is now online!! :)");
 })
 
 bot.on('message', msg=>{
@@ -17,8 +18,9 @@ bot.on('message', msg=>{
 
     switch(args[0]){
         case 'ping':
-            msg.channel.send('ping me again nigga :gun:');
+            msg.channel.send('ping me again my guy :gun:');
             break;
+        
         case 'plug':
             if(args[1]==='twitter'){
                 msg.channel.send('https://twitter.com/MichaelOdusanya');
@@ -30,6 +32,7 @@ bot.on('message', msg=>{
                 msg.channel.send('wtf am i pluggin bro? I dont recognize this shit :( ')
             }
             break;
+        
         case 'userInfo':
             const embed = new Discord.MessageEmbed()
             .setTitle("User Info")
@@ -39,15 +42,22 @@ bot.on('message', msg=>{
             .setThumbnail(msg.author.displayAvatarURL())
             msg.channel.send(embed);
             break;
+        
         case 'bless':
             image(msg, args[1]);
             break;
+        
         case 'sosa':
             msg.channel.send("Fuckers in school telling me, always in the barber shop Chief Keef ain’t bout this, Chief Keef ain’t bout that My boy a BD on fucking Lamron and them He, he they say that nigga don’t be putting in no work SHUT THE FUCK UP! Y'all niggas ain’t know shit All ya motherfuckers talk about Chief Keef ain’t no hitta Chief Keef ain’t this Chief Keef a fake SHUT THE FUCK UP Y'all don’t live with that nigga Y'all know that nigga got caught with a ratchet Shootin' at the police and shit Nigga been on probation since fuckin, I don’t know when! Motherfuckers stop fuckin' playin' him like that Them niggas savages out there If I catch another motherfucker talking sweet about Chief Keef I’m fucking beating they ass! I’m not fucking playing no more You know those niggas role with Lil' Reese and them");
             break;
+        
         case 'gintoki':
             const attach = new MessageAttachment("https://media.giphy.com/media/kdM3zfq85XSb6/giphy.gif");
             msg.channel.send(attach);
+            break;
+
+        case 'joke':
+            joke(msg);
             break;
     }
 });
@@ -72,7 +82,6 @@ function image(msg, input){
         var links = $(".image a.link");
 
         var urls = new Array(links.length).fill(0).map((v,i) => links.eq(i).attr("href"));
-        console.log(urls);
 
         if(!urls.length){
             return;
@@ -80,6 +89,19 @@ function image(msg, input){
 
         msg.channel.send(urls[Math.floor(Math.random()*urls.length)]);
 
+    });
+}
+
+function joke(msg){
+    const url = "https://us-central1-dadsofunny.cloudfunctions.net/DadJokes/random/jokes";
+    axios.get(url)
+    .then((resp)=>{
+        const jok = resp.data;
+        msg.channel.send(jok.setup);
+        msg.channel.send(jok.punchline);
+    })
+    .catch((err)=>{
+        console.log(err);
     });
 }
 
