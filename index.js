@@ -3,8 +3,8 @@ const {Client, MessageAttachment} = require('discord.js');
 const bot = new Discord.Client();
 const cheerio = require('cheerio');
 const request = require('request');
+require('dotenv').config();
 
-const token = 'NzQzNTU0NzM1ODE0MDgyNzAx.XzWXTw.Y_MiRTa7mYrFCDrjo_05wiNkfKE';
 const PREFIX = '$';
 
 bot.on('ready', () => {
@@ -83,4 +83,4 @@ function image(msg, input){
     });
 }
 
-bot.login(token);
+bot.login(process.env.BOT_TOKEN);
