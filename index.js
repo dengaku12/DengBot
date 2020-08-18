@@ -59,6 +59,14 @@ bot.on('message', msg=>{
         case 'joke':
             joke(msg);
             break;
+
+        case 'meme':
+            if(!args[1]){
+                meme(msg);
+            }else{
+                meme(msg, args[1]);
+            }
+            break;
     }
 });
 
@@ -102,6 +110,24 @@ function joke(msg){
     })
     .catch((err)=>{
         console.log(err);
+    });
+}
+
+function meme(msg, input){
+    let url;
+    if(!input){
+        url = "https://meme-api.herokuapp.com/gimme";
+    }else{
+        url = "https://meme-api.herokuapp.com/gimme/" + input;
+    }
+    axios.get(url)
+    .then((resp)=>{
+        const mem = resp.data;
+        msg.channel.send(mem.url);
+    })
+    .catch((err)=>{
+        console.log(err);
+        msg.channel.send("Thats not a vaild subreddit, try again bro :smiling_imp:");
     });
 }
 
