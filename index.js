@@ -4,6 +4,7 @@ const bot = new Discord.Client();
 const cheerio = require('cheerio');
 const request = require('request');
 const axios = require('axios');
+var Scraper = require('images-scraper');
 require('dotenv').config();
 
 const PREFIX = '$';
@@ -44,7 +45,8 @@ bot.on('message', msg=>{
             break;
         
         case 'bless':
-            image(msg, args[1]);
+            const query = args.slice(1);
+            image(msg, query);
             break;
         
         case 'sosa':
@@ -71,33 +73,23 @@ bot.on('message', msg=>{
 });
 
 function image(msg, input){
-    var options = {
-        url: "http://results.dogpile.com/serp?qc=images&q=" + input,
-        method: "GET",
-        headers: {
-            "Accept": "text/html",
-            "User-Agent": "Chrome"
-        }
-    };
-
-    request(options, function(error, response, responseBody){
-        if(error){
-            return;
-        }
-
-        $ = cheerio.load(responseBody);
-
-        var links = $(".image a.link");
-
-        var urls = new Array(links.length).fill(0).map((v,i) => links.eq(i).attr("href"));
-
-        if(!urls.length){
-            return;
-        }
-
-        msg.channel.send(urls[Math.floor(Math.random()*urls.length)]);
-
+    const google = new Scraper({
+        puppeteer: {
+          headless: true,
+        },
     });
+
+    (async () => {
+        try{
+            const results = await google.scrape(input, 50);
+            msg.channel.send(results[Math.floor(Math.random()*results.length)].url);
+        }
+        catch(err){
+            console.log(err);
+            return msg.channel.send("Gimme something to search for dummy :unamused:");
+        }
+            
+    })();
 }
 
 function joke(msg){
