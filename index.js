@@ -1,8 +1,6 @@
 const Discord = require('discord.js');
 const {Client, MessageAttachment} = require('discord.js');
 const bot = new Discord.Client();
-const cheerio = require('cheerio');
-const request = require('request');
 const axios = require('axios');
 var Scraper = require('images-scraper');
 require('dotenv').config();
@@ -86,7 +84,7 @@ function image(msg, input){
         }
         catch(err){
             console.log(err);
-            return msg.channel.send("Gimme something to search for dummy :unamused:");
+            return msg.channel.send("Gimme somethin to search for dummy :unamused:");
         }
             
     })();
