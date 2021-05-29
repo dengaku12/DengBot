@@ -71,23 +71,16 @@ bot.on('message', msg=>{
 });
 
 function image(msg, input){
-    const google = new Scraper({
-        puppeteer: {
-          headless: true,
-        },
-    });
-
-    (async () => {
-        try{
-            const results = await google.scrape(input, 50);
-            msg.channel.send(results[Math.floor(Math.random()*results.length)].url);
-        }
-        catch(err){
-            console.log(err);
-            return msg.channel.send("Gimme somethin to search for dummy :unamused:");
-        }
-            
-    })();
+    const url = `https://customsearch.googleapis.com/customsearch/v1?cx=${process.env.SEARCH_ENGINE_ID}&imgSize=imgSizeUndefined&num=10&q=${input}&searchType=image&key=${process.env.GOOGLE_API_KEY}`;
+    axios.get(url)
+    .then((resp)=>{
+        const images = resp.data.items;
+        msg.channel.send(images[Math.floor(Math.random()*images.length)].link);
+    })
+    .catch((err)=>{
+        console.log(err);
+        msg.channel.send("Gimme somethin to search for dummy :unamused:");
+    })
 }
 
 function joke(msg){
