@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const {Client, MessageAttachment} = require('discord.js');
 const bot = new Discord.Client();
 const axios = require('axios');
-var Scraper = require('images-scraper');
 require('dotenv').config();
 
 const PREFIX = '$';
